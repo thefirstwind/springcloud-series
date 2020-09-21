@@ -8,6 +8,9 @@
 ### 创建一个 Git Config Repository
 https://github.com/thefirstwind/springcloud-series-config-repo.git
 
+### 创建 项目
+https://github.com/thefirstwind/springcloud-series/tree/master/spring-cloud-config-server.git
+
 ### 创建文件 catalogservice.properties
 ```
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
