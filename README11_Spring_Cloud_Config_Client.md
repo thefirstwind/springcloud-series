@@ -83,6 +83,7 @@ server.port=8181
 spring.application.name=catalogservice
 spring.cloud.config.uri=http://localhost:8888
 management.security.enabled=false
+spring.cloud.config.enabled=true
 ```
 
 spring.application.name 对应 [springcloud-series-config-repo](https://github.com/thefirstwind/springcloud-series-config-repo) 项目下的 catalogservice.properties 文件
@@ -199,6 +200,24 @@ name=kei2
 ## 请求地址 http://localhost:8181/properties
 ```json
 {"datasource":{"driverClassName":"com.mysql.jdbc.Driver","url":"jdbc:mysql://localhost:3306/catalog","username":"root","password":"dev@990990"},"name":"kei"}
+```
+
+## 当更新了配置文件之后，可以通过refresh接口更新配置
+首先请求接口 http://localhost:8181/properties
+获得如下内容
+```json
+{"datasource":{"driverClassName":"com.mysql.jdbc.Driver","url":"jdbc:mysql://localhost:3306/catalog","username":"root","password":"dev@990990"},"name":"kei3"}
+```
+更新catalogservice.properties 内容为
+```
+name=kei4
+```
+```shell
+curl -H "Content-Type: application/json" -d {} http://localhost:8181/actuator/refresh
+```
+再次请求接口 http://localhost:8181/properties
+```json
+{"datasource":{"driverClassName":"com.mysql.jdbc.Driver","url":"jdbc:mysql://localhost:3306/catalog","username":"root","password":"dev@990990"},"name":"kei4"}
 ```
 
 ## Related Content
