@@ -16,7 +16,7 @@ In this post, we are going to learn:
 > 不需要重启服务
 
 另外还有2篇文章
-* [Spring Cloud Config Server的介绍](README11_Config_Server.md)
+* [Spring Cloud Config Server的介绍](README11_Spring_Cloud_Config_Server.md)
 * [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
 ## 2 Create our first micro-service: catalog-service
 ## 3 Create Spring Cloud Config Server
