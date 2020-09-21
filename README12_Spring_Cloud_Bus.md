@@ -59,6 +59,10 @@ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/li
 sudo apt-get -y update
 sudo apt-get -y install docker-ce
 
+sudo gpasswd -a ${USER} docker
+
+退出当前登录，再次登录
+
 
 ```
 ## Monitor的添加
@@ -84,6 +88,9 @@ http://47.103.128.159:8181/properties
 {"datasource":{"driverClassName":"com.mysql.jdbc.Driver","url":"jdbc:mysql://localhost:3306/catalog","username":"root","password":"dev@990990"},"name":"kei6"}
 ```
 
+## 上2篇
+* [Spring Cloud Config Server的介绍](README11_Spring_Cloud_Config_Server.md)
+* [Spring Cloud Config Client的介绍](README11_Spring_Cloud_Config_Client.md)
 
 ## Related Content
 * [Part1 overview](README.md)

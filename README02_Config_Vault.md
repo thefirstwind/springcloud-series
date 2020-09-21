@@ -15,8 +15,9 @@ In this post, we are going to learn:
 > 作为后端 存储这些配置参数。当我们要更新属性的时候，使用 /refresh 去实时更新配置，
 > 不需要重启服务
 
-另外还有2篇文章
+另外还有3篇文章，作为本篇文章的基础
 * [Spring Cloud Config Server的介绍](README11_Spring_Cloud_Config_Server.md)
+* [Spring Cloud Config Client的介绍](README11_Spring_Cloud_Config_Client.md)
 * [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
 ## 2 Create our first micro-service: catalog-service
 ## 3 Create Spring Cloud Config Server

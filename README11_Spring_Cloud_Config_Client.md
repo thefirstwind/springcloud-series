@@ -220,6 +220,12 @@ curl -H "Content-Type: application/json" -d {} http://localhost:8181/actuator/re
 {"datasource":{"driverClassName":"com.mysql.jdbc.Driver","url":"jdbc:mysql://localhost:3306/catalog","username":"root","password":"dev@990990"},"name":"kei4"}
 ```
 
+##  上一篇
+* [Spring Cloud Config Server的介绍](README11_Spring_Cloud_Config_Server.md)
+##  下一篇
+* [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
+
+
 ## Related Content
 * [Part1 overview](README.md)
 * [Part2 Spring Cloud Config and Vault](README02_Config_Vault.md)

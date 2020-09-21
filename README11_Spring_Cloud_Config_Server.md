@@ -202,6 +202,9 @@ http://localhost:8888/catalogservice/prod then you will get the following respon
 }
 ```
 
+## 后2篇
+* [Spring Cloud Config Client的介绍](README11_Spring_Cloud_Config_Client.md)
+* [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
 
 ## Related Content
 * [Part1 overview](README.md)
