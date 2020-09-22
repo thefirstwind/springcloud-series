@@ -8,7 +8,6 @@ In this post, we are going to learn:
 * Using Vault for storing sensitive data
 
 ## 1 What is the need for Spring Cloud Config and Vault?
-
 > 在springBoot中提供了很多可扩展的配置属性，但是当这些属性被修改的时候，你需要重启应用
 
 > 创建一个 Spring Cloud Config Server，我们可以使用 git svn database 或者 consul
@@ -19,6 +18,16 @@ In this post, we are going to learn:
 * [Spring Cloud Config Server的介绍](README11_Spring_Cloud_Config_Server.md)
 * [Spring Cloud Config Client的介绍](README11_Spring_Cloud_Config_Client.md)
 * [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
+
+
+## 2 Create our first micro-service: catalog-service
+## 3 Create Spring Cloud Config Server
+## 4 Refactor catalog-service to use Config Server
+## 5 Using Vault for storing sensitive data
+## 6 Summary
+
+
+
 ## 2 Create our first micro-service: catalog-service
 ## 3 Create Spring Cloud Config Server
 ## 4 Refactor catalog-service to use Config Server
