@@ -15,15 +15,15 @@ import java.util.Optional;
 @Slf4j
 public class ProductService {
 
-//    private final ProductRepository productRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
 //    @Autowired
-//    public ProductService(ProductRepository productRepository){
-//        this.productRepository = productRepository;
-//    }
+//    private ProductRepository productRepository;
+
+    @Autowired
+    public ProductService(ProductRepository productRepository){
+        this.productRepository = productRepository;
+    }
 
     public List<Product> findAllProducts(){
         return productRepository.findAll();

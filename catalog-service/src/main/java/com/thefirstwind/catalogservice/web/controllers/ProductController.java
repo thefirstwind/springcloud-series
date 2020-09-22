@@ -17,14 +17,19 @@ import java.util.List;
 @Slf4j
 public class ProductController {
 
+    private final ProductService productService;
+
     @Autowired
-    private ProductService productService;
+    public ProductController(ProductService productService){
+        this.productService = productService;
+    }
 
     @GetMapping("")
     public List<Product> allProducts(){
         return productService.findAllProducts();
     }
 
+    @GetMapping("/{code}")
     public Product productByCode(@PathVariable String code){
         return productService.findProductByCode(code)
                 .orElseThrow(() -> new ProductNotFoundException("Product with code ["+code+"] doesn't exist"));
