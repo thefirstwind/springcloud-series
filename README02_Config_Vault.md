@@ -304,7 +304,7 @@ public class CatalogServiceApplication {
 }
 
 ```
-### 3.6 创建 properties文件
+### 3.6 创建 application.properties文件
 ```properties
 server.port=8181
 logging.level.com.sivalabs=debug
@@ -332,18 +332,262 @@ spring.cloud.vault.uri=http://localhost:8888
 spring.cloud.vault.token=934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
 ```
 
+### 3.7 在 docker-compose.yml 文件中加入 mysql相关操作
+```yml
+version: '3'
+services:
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: catalog
+```
+
 ## 4 Create Spring Cloud Config Server
+### 4.1 创建pom.xml文件
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thefirstwind</groupId>
+    <artifactId>config-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>config-service</name>
+    <description>ConfigService REST API</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <start-class>com.thefirstwind.configServer.ConfigServerApplication</start-class>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.M8</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+### 4.2 创建启动项
+```java
+package com.thefirstwind.configServer;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@EnableConfigServer
+@SpringBootApplication
+public class ConfigServerApplication {
+
+    public static void main(String[] args){
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}
+```
+### 4.3 创建 properties 文件
+```properties
+server.port=8888
+spring.config.name=configserver
+
+spring.profiles.include=native
+spring.cloud.config.server.native.search-locations=classpath:/config-repo
+
+management.endpoints.web.exposure.include=*
+```
+
+config-repo/catalog-service.properties
+```properties
+logging.level.com.sivalabs=debug
+```
+
+
 ## 5 Refactor catalog-service to use Config Server
-## 6 Using Vault for storing sensitive data
+从新构建 catalog-service使用 config server
+### 5.1 确认 catalog-service 项目中 pom.xml 加入以下依赖
+```xml
+<dependency>
+   <groupId>org.springframework.cloud</groupId>
+   <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+
+```
+
+### 5.2 重命名 application.properties 为 bootstrap.properties, 并且确认包含以下配置
+```properties
+spring.application.name=catalog-service
+server.port=8181
+management.endpoints.web.exposure.include=*
+spring.cloud.config.uri=http://localhost:8888
+
+```
+
+### 5.3 确认 config-service的 config-repo/catalog-service.properties 包含以下内容
+```properties
+logging.level.com.sivalabs=debug
+ 
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/catalog?useSSL=false
+ 
+spring.datasource.initialization-mode=always
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+```
+
+并且 catalog-service项目中 bootstrap.properties 删除重复项
+
+### 5.4 在 docker-compose.yml 文件中加入 vault相关操作
+```yml
+version: '3'
+services:
+  vault:
+    image: vault:1.4.0
+    container_name: vault
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: 934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
+    ports:
+      - 8200:8200
+
+  setup-vault:
+    image: vault:1.4.0
+    container_name: setup-vault
+    entrypoint: /bin/sh
+    volumes:
+      - './config:/config'
+    environment:
+      VAULT_ADDR: 'http://vault:8200'
+      CONFIG_DIR: '/config'
+    command: >
+      -c "
+      sleep 2;
+      /config/vault-init.sh;
+      "
+    depends_on:
+      - vault
+```
+
+### 5.5 config 目录下，加入准备好 2个json文件 和 vault-int.sh文件
+
+config/application.json
+```json
+{
+  "spring.rabbitmq.username": "guest",
+  "spring.rabbitmq.password": "guest"
+}
+```
+
+config/catalog-service.json
+```json
+{ 
+    "spring.datasource.username": "root", 
+    "spring.datasource.password": "admin"
+}
+```
+
+config/vault-init.sh
+```shell script
+#!/bin/sh
+
+VAULT_DEV_TOKEN=934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
+
+vault login ${VAULT_DEV_TOKEN}
+
+vault login
+
+vault secrets disable secret
+vault secrets enable -version=1 -path=secret kv
+vault kv put secret/application @${CONFIG_DIR}/application.json
+vault kv put secret/catalog-service @${CONFIG_DIR}/catalog-service.json
+
+
+```
+
 ## 7 Summary
+验证效果
+
+```shell script
+
+# 拉取代码& 切换分支
+> git clone https://github.com/thefirstwind/springcloud-series.git
+> cd springcloud-series
+> git checkout part2-config-vault
 
 
+# 启动docker，拉取镜像
+> docker-compose up
 
-## 2 Create our first micro-service: catalog-service
-## 3 Create Spring Cloud Config Server
-## 4 Refactor catalog-service to use Config Server
-## 5 Using Vault for storing sensitive data
-## 6 Summary
+# 验证 mysql 和 vault是否启动成功
+# 登陆数据库
+# 访问 http://localhost:8200/ token 934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
+
+# 确认当前环境是 java8 ， 注 java11 是有问题的
+
+# 编译项目
+> mvn clean install 
+
+# 启动配置服务
+> cd config-server
+> mvn spring-boot:run
+# 访问 http://localhost:8888/actuator/env 看是否有返回数据
+
+# 启动 catalog-service服务
+> cd catalog-service
+> mvn spring-boot:run
+# 访问 http://localhost:8181/api/products 看是否有返回数据
+
+```
 
 ## Related Content
 * [Part1 overview](README.md)
