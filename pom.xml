@@ -24,7 +24,6 @@
         <module>zipkin-server</module>
         <module>spring-cloud-config-server</module>
         <module>spring-cloud-config-client</module>
-        <module>spring-cloud-bus</module>
     </modules>
 
 </project>
