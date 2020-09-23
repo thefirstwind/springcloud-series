@@ -10,8 +10,3 @@ vault secrets disable secret
 vault secrets enable -version=1 -path=secret kv
 vault kv put secret/application @${CONFIG_DIR}/application.json
 vault kv put secret/catalog-service @${CONFIG_DIR}/catalog-service.json
-
-
-
-
-
