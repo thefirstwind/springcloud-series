@@ -17,12 +17,15 @@ import java.util.List;
 @Slf4j
 public class ProductController {
 
-    private final ProductService productService;
-
     @Autowired
-    public ProductController(ProductService productService){
-        this.productService = productService;
-    }
+    private ProductService productService;
+
+//    private final ProductService productService;
+
+//    @Autowired
+//    public ProductController(ProductService productService){
+//        this.productService = productService;
+//    }
 
     @GetMapping("")
     public List<Product> allProducts(){
