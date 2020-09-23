@@ -19,6 +19,12 @@ In this post, we are going to learn:
 * [Spring Cloud Config Client的介绍](README11_Spring_Cloud_Config_Client.md)
 * [使用Spring Cloud Bus来自动更新配置](README12_Spring_Cloud_Bus.md)
 
+## 本文代码地址 需要参考 part2-config-vault 分支
+```
+git checkout part2-config-vault
+```
+https://github.com/thefirstwind/springcloud-series/tree/part2-config-vault
+
 
 ## 2 Create our first micro-service: catalog-service
 ## 3 Create Spring Cloud Config Server
