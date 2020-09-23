@@ -1,4 +1,5 @@
 { 
     "spring.datasource.username": "root", 
-    "spring.datasource.password": "admin"
+    "spring.datasource.password": "admin",
+    "product.limit": 1
 }

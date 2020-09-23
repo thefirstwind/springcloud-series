@@ -554,7 +554,7 @@ vault kv put secret/catalog-service @${CONFIG_DIR}/catalog-service.json
 
 ```
 
-## 7 Summary
+## 6 运行
 验证效果
 
 ```shell script
@@ -589,6 +589,39 @@ vault kv put secret/catalog-service @${CONFIG_DIR}/catalog-service.json
 
 ```
 
+## 7 验证vault的实时性
+
+### 7.1 在 catalog-service.json中添加
+    "product.limit": 1
+
+### 7.2 在 ProductController中添加
+```java
+    @Value("${product.limit}")
+    private Integer productLimit;
+
+    @GetMapping("/getProductLimit")
+    public Integer getProductLimit(){
+        return productLimit;
+    }
+```
+
+### 7.3 启动项目
+```shell script
+> docker-compose up
+> cd config-server
+> mvn spring-boot:run
+> cd catalog-service
+> mvn spring-boot:run
+
+# 访问 http://localhost:8200/ token 934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
+
+# 访问 http://localhost:8181/api/products/getProductLimit  
+# 返回结果 1
+
+# 修改 vault中 product.limit 的值 
+# 返回结果不变 TODO 待解决
+
+```
 ## Related Content
 * [Part1 overview](README.md)
 * [Part2 Spring Cloud Config and Vault]()
