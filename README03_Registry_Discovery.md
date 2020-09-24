@@ -2,15 +2,27 @@
 
 ## 1 overview
 
+This post, we are going to learn:
+
+* What is Service Registry and Discovery?
+* Spring Cloud Netflix Eureka-based Service Registry
+* Registering microservices as Eureka Clients
+* Discovering other services using Eureka Client
+
+
 In the microservices world, Service Registry and Discovery plays an important role because we most likely run multiple instances of services and we need a mechanism to call other services without hardcoding their hostnames or port numbers. In addition to that, in Cloud environments service instances may come up and go down anytime. So we need some automatic service registration and discovery mechanism. Spring Cloud provides Service Registry and Discovery features, as usual, with multiple options. We can use Netflix Eureka or Consul for Service Registry and Discovery. In this post, we will learn how to use SpringCloud Netflix Eureka for Service Registry and Discovery.
 
-java -jar -Dserver.port=8888 config-server/target/config-server-0.0.1-SNAPSHOT.jar
+java -jar -Dserver.port=8888 config-server/target/config-server.jar &
 
-java -jar -Dserver.port=8761 service-registry/target/service-registry.jar
+java -jar -Dserver.port=8761 service-registry/target/service-registry.jar &
 
-java -jar -Dserver.port=8181 catalog-service/target/catalog-service.jar
+java -jar -Dserver.port=8181 catalog-service/target/catalog-service.jar &
 
-java -jar -Dserver.port=8182 catalog-service/target/catalog-service.jar
+java -jar -Dserver.port=8182 catalog-service/target/catalog-service.jar &
+
+java -jar -Dserver.port=8281 inventory-service/target/inventory-service.jar &
+
+java -jar -Dserver.port=8282 inventory-service/target/inventory-service.jar &
 
 ## 2 What is Service Registry and Discovery?
 
@@ -33,3 +45,5 @@ java -jar -Dserver.port=8182 catalog-service/target/catalog-service.jar
 * [Spring cloud config server](README11_Spring_Cloud_Config_Server.md)
 * [Spring cloud config client](README11_Spring_Cloud_Config_Client.md)
 * [Spring cloud bus](README12_Spring_Cloud_Bus.md)
+* [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
+* [Nexflix Hystrix How It Works](README13_Nexflix_Hystrix_How_it_works.md)

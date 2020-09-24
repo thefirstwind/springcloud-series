@@ -214,6 +214,8 @@ http://localhost:8888/catalogservice/prod then you will get the following respon
 * [Part5 Zuul Proxy as API Gateway](README05_API_Gateway.md)
 * [Part6 Distributed Tracing with Sleuth and Zipkin](README06_Distributed_Tracing.md)
 
-* [Spring cloud config server]()
+* [Spring cloud config server](README11_Spring_Cloud_Config_Server.md)
 * [Spring cloud config client](README11_Spring_Cloud_Config_Client.md)
 * [Spring cloud bus](README12_Spring_Cloud_Bus.md)
+* [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
+* [Nexflix Hystrix How It Works](README13_Nexflix_Hystrix_How_it_works.md)
