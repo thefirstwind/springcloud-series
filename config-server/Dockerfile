@@ -1,5 +1,5 @@
 FROM fabric8/java-alpine-openjdk8-jre
-ADD ["target/config-service.jar", "app.jar"]
+ADD ["target/config-server.jar", "app.jar"]
 EXPOSE 8888 8787
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
 RUN sh -c 'touch /app.jar'

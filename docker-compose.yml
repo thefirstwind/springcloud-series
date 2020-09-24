@@ -8,7 +8,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: catalog
-
+  rabbitmq:
+    image: 'rabbitmq:3.8.3-management'
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
   vault:
     image: vault:1.4.0
     container_name: vault
@@ -35,3 +43,12 @@ services:
       "
     depends_on:
       - vault
+
+  config-server:
+    container_name: config-server
+    build: ./config-server
+    ports:
+      - "8888:8888"
+      - "18787:8787"
+    depends_on:
+      - rabbitmq

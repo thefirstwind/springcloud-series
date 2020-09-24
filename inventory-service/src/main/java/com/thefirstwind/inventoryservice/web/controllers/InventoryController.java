@@ -18,8 +18,12 @@ import java.util.Optional;
 @Slf4j
 public class InventoryController {
 
+    private final InventoryItemRepository inventoryItemRepository;
+
     @Autowired
-    private InventoryItemRepository inventoryItemRepository;
+    public InventoryController(InventoryItemRepository inventoryItemRepository) {
+        this.inventoryItemRepository = inventoryItemRepository;
+    }
 
     @GetMapping("/api/inventory/{productCode}")
     @HystrixCommand
