@@ -429,6 +429,10 @@ mvn spring-boot:run
 
 * feign 项目 通过  @FeignClient("spring-cloud-eureka-client") 查找 eureka客户端项目，并且发送请求
 
+## 4 扩展阅读 对eureka的理解
+
+https://medium.com/swlh/spring-cloud-service-discovery-with-eureka-16f32068e5c7
+https://medium.com/swlh/spring-cloud-high-availability-for-eureka-b5b7abcefb32
 
 ## Related Content
 * [Part1 overview](README.md)
