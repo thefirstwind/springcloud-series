@@ -46,4 +46,4 @@ java -jar -Dserver.port=8282 inventory-service/target/inventory-service.jar &
 * [Spring cloud config client](README11_Spring_Cloud_Config_Client.md)
 * [Spring cloud bus](README12_Spring_Cloud_Bus.md)
 * [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
-* [Nexflix Hystrix How It Works](README13_Nexflix_Hystrix_How_it_works.md)
+* [Netflix Hystrix How It Works](README13_Netflix_Hystrix_How_it_works.md)

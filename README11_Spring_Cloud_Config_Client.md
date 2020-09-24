@@ -238,4 +238,4 @@ curl -H "Content-Type: application/json" -d {} http://localhost:8181/actuator/re
 * [Spring cloud config client]()
 * [Spring cloud bus](README12_Spring_Cloud_Bus.md)
 * [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
-* [Nexflix Hystrix How It Works](README13_Nexflix_Hystrix_How_it_works.md)
+* [Netflix Hystrix How It Works](README13_Netflix_Hystrix_How_it_works.md)
