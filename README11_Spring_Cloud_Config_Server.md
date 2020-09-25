@@ -220,3 +220,4 @@ http://localhost:8888/catalogservice/prod then you will get the following respon
 * [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
 * [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
+* [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)

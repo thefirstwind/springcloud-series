@@ -1,8 +1,32 @@
 # Part4 Circuit Breaker using Netflix Hystrix
 
+<!--https://www.sivalabs.in/2018/03/spring-cloud-netflix-circuit-breaker/-->
+
 在微服务中，Netfix 创建了 Hystrix库，来实现 熔断机制，我们可以使用 Spring Cloud Netflix Hystrix Circuit Breaker来保护广播式的大流量导入造成的系统失败。
 
+> In the microservices world, to fulfill a client request one microservice  
+> may need to talk to other microservices. We should minimize this kind of  
+> direct dependencies on other microservices but in some cases it is unavoidable.  
+> If a microservice is down or not functioning properly then the issue may  
+> cascade up to the upstream services. Netflix created Hystrix library  
+> implementing Circuit Breaker pattern to address these kinds of issues.  
+> We can use Spring Cloud Netflix Hystrix Circuit Breaker to protect  
+> microservices from cascading failures.
+
+In this post we are going to learn:
+* Implementing Circuit Breaker pattern using @HystrixCommand
+* How to propagate ThreadLocal variables
+* Monitoring Circuit Breakers using Hystrix Dashboard
+
+
 ## 1 Implementing Netflix Hystrix Circuit Breaker pattern
+
+> From catalog-service we are invoking REST endpoint on inventory-service  
+> to get the inventory level of a product. What if inventory-service is  
+> down? What if inventory-service is taking too long to respond thereby  
+> slowing down all the services depending on it? We would like to have  
+> some timeouts and implement some fallback mechanism.
+
 
 ### 1.1 修改 catalog-service的 pom.xml文件
 ```xml
@@ -42,6 +66,12 @@ public class CatalogServiceApplication {
 
 ```
 ### 1.3 可以使用 @HystrixCommand 注解，应用在超时和回调方法中
+
+> Now we can use @HystrixCommand annotation on any method we want to apply timeout and fallback method.
+> Let us create InventoryServiceClient.java which will invoke inventory-service  
+> REST endpoint and apply @HystrixCommand with a fallback implementation.
+
+
 
 如下 创建 InventoryServiceClient.java 文件
 ```java
@@ -102,7 +132,57 @@ public class InventoryServiceClient {
 }
 
 ```
+
+> We have annotated the method from where we are making a REST call with  
+> @HystrixCommand(fallbackMethod = “getDefaultProductInventoryByCode”)  
+> so that if it doesn’t receive the response within the certain time limit  
+> the call gets timed out and invoke the configured fallback method.  
+> The fallback method should be defined in the same class and should have  
+> the same signature. In the fallback method getDefaultProductInventoryByCode()  
+> we are setting the availableQuantity to 50, obviously, this behavior  
+> depends on what business wants.
+
+> We can customize the @HystrixCommand default behavior by configuring  
+> properties using @HystrixProperty annotations.
+
+如下所示
+```java
+@HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode",
+    commandProperties = {
+       @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+       @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value="60")
+    }
+)
+public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode)
+{
+    ....
+}
+
+```
+
+同时，也可以设置到 bootstrap.properties/yml 文件中, 如下所示
+```properties
+hystrix.command.getProductInventoryByCode.execution.isolation.thread.timeoutInMilliseconds=2000
+hystrix.command.getProductInventoryByCode.circuitBreaker.errorThresholdPercentage=60
+```
+
+另外还可以通过指定 commandKey 实现默认的行为，如下所示
+```java
+@HystrixCommand(commandKey = "inventory-by-productcode", fallbackMethod = "getDefaultProductInventoryByCode")
+public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode)
+{
+    ...
+}
+
+```
+
 ## 2 How to propagate ThreadLocal variables
+> By default, the methods with @HystrixCommand will be executed on a different thread because the default execution.isolation.strategy is ExecutionIsolationStrategy.THREAD. So, the ThreadLocal variables we set before invoking @HystrixCommand methods won’t be available within @HystrixCommand methods.
+
+> One option to make the ThreadLocal variables available is using execution.isolation.strategy=SEMAPHORE.
+
+
+
 ## 3 Monitoring Circuit Breakers using Hystrix Dashboard
 ### 3.1  创建项目 hystrix-dashboard项目
 ### 3.2 在pom.xml中添加以下依赖
@@ -116,6 +196,10 @@ public class InventoryServiceClient {
 ### 3.3 在application上添加 @EnableHystrixDashboard 注解
 可以通过 http://localhost:8181/actuator/hystrix.stream 来监控
 
+
+##  为了加深对hystrix的理解可以参考以下2篇文章
+* [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
+* [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
 
 ## Related Content
 * [Part1 overview](README.md)
@@ -131,3 +215,4 @@ public class InventoryServiceClient {
 * [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
 * [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
+* [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
