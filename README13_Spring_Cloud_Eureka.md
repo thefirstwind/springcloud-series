@@ -6,6 +6,11 @@
 * 2 spring-cloud-eureka-client : 注册客户端
 * 3 spring-cloud-eureka-feign-client : 注册客户端 使用 feign实现，用到 2的项目
 
+项目目录：
+* https://github.com/thefirstwind/springcloud-series/tree/master/spring-cloud-eureka-server
+* https://github.com/thefirstwind/springcloud-series/tree/master/spring-cloud-eureka-client
+* https://github.com/thefirstwind/springcloud-series/tree/master/spring-cloud-eureka-feign-client
+
 ## 1 创建项目 spring-cloud-eureka-server
 
 ### 1.1 添加 pom.xml 依赖
@@ -431,8 +436,8 @@ mvn spring-boot:run
 
 ## 4 扩展阅读 对eureka的理解
 
-https://medium.com/swlh/spring-cloud-service-discovery-with-eureka-16f32068e5c7
-https://medium.com/swlh/spring-cloud-high-availability-for-eureka-b5b7abcefb32
+* https://medium.com/swlh/spring-cloud-service-discovery-with-eureka-16f32068e5c7
+* https://medium.com/swlh/spring-cloud-high-availability-for-eureka-b5b7abcefb32
 
 ## Related Content
 * [Part1 overview](README.md)
