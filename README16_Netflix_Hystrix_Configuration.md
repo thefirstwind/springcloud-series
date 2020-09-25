@@ -15,7 +15,7 @@
   * 2.2 [Fallback](#anchor220)<!-- @IGNORE PREVIOUS: anchor -->
     * 2.2.1 [fallback.isolation.semaphore.maxConcurrentRequests](#anchor221)<!-- @IGNORE PREVIOUS: anchor -->
     * 2.2.2 [fallback.enabled](#anchor222)<!-- @IGNORE PREVIOUS: anchor -->
-  * 2.3 [Circuit Breaker(#anchor230)<!-- @IGNORE PREVIOUS: anchor -->
+  * 2.3 [Circuit Breaker](#anchor230)<!-- @IGNORE PREVIOUS: anchor -->
     * 2.3.1 [circuitBreaker.enabled](#anchor231)<!-- @IGNORE PREVIOUS: anchor -->
     * 2.3.2 [circuitBreaker.requestVolumeThreshold](#anchor232)<!-- @IGNORE PREVIOUS: anchor -->
     * 2.3.3 [circuitBreaker.sleepWindowInMilliseconds](#anchor233)<!-- @IGNORE PREVIOUS: anchor -->
