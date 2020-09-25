@@ -102,4 +102,7 @@ http://47.103.128.159:8181/properties
 
 * [Spring cloud config server](README11_Spring_Cloud_Config_Server.md)
 * [Spring cloud config client](README11_Spring_Cloud_Config_Client.md)
-* [Spring cloud bus]()
+* [Spring cloud bus](README12_Spring_Cloud_Bus.md)
+* [Spring Microservices Docker Example](https://github.com/thefirstwind/spring-microservices-docker-example/blob/master/README.md)
+* [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
+* [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
