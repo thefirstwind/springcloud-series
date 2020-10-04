@@ -221,6 +221,7 @@ ok
 ## 2 Hystrix 的熔断
 
 添加 hystrix的依赖
+
 ```xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
@@ -230,6 +231,7 @@ ok
 ```
 
 在 activity项目中 的 LoginActivityController.java 中添加 超时 和 失败 用的调试方法
+
 ```java
 @PostMapping("firstLoginActivityTimeout")
 public String firstLoginActivityTimeout(@RequestBody Long userId)  {
@@ -249,11 +251,13 @@ public String firstLoginActivityError(@RequestBody Long userId)  {
 ```
 
 在user项目中 的 application.java 中添加 Hystrix的声明
+
 ```
 @SpringCloudApplication
 ```
 
 在user项目的controller中添加调用的方法
+
 ```java
 @PostMapping("/userRegisterationTimeout")
 public String userRegistrationTimeout(@RequestBody User user){
@@ -273,6 +277,7 @@ public String userRegisterationError(@RequestBody User user){
 ```
 
 在user项目中的activityService.java中添加熔断相关的方法
+
 ```java
 @HystrixCommand(
         commandProperties = {
@@ -296,6 +301,7 @@ public String firstLoginFallback0(Long userId) {
 
 
 postman 请求验证
+
 ![](_images/491B8F5B-4F6A-4414-8724-2E0956B419E6.png)
 
 https://www.bilibili.com/video/BV1V4411F7my
