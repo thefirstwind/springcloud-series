@@ -302,6 +302,8 @@ public String firstLoginFallback0(Long userId) {
 
 postman 请求验证
 
+![](_images/112F9860-CAC3-4A89-BB05-ABD86E07C56D.png)
+
 ![](_images/491B8F5B-4F6A-4414-8724-2E0956B419E6.png)
 
 https://www.bilibili.com/video/BV1V4411F7my

@@ -26,7 +26,7 @@ public class ActivityService {
 
     @HystrixCommand(
             commandProperties = {
-                    @HystrixProperty(name= "execution.isolation.thread.timeoutInMilliseconds", value="2000")
+                    @HystrixProperty(name= "execution.isolation.thread.timeoutInMilliseconds", value="1000")
             }
     )
     public String firstLoginTimeout(Long userId) {

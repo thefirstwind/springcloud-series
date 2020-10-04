@@ -22,7 +22,7 @@ public class LoginActivityController {
     public String firstLoginActivityTimeout(@RequestBody Long userId)  {
         try {
             TimeUnit.SECONDS.sleep(RandomUtils.nextInt(5) + 1);
-        }catch(InterruptedException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
         System.out.println("firstLoginActivity 初始化活动 Timeout" + userId);
