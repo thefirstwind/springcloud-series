@@ -2,6 +2,7 @@ package com.thefirstwind.hystrix.user.controller;
 
 import com.thefirstwind.hystrix.user.entity.User;
 import com.thefirstwind.hystrix.user.service.ActivityService;
+import com.thefirstwind.hystrix.user.service.ActivityServiceBulkhead;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterationController {
 
     @Autowired
-    private ActivityService activityService;
+    private ActivityServiceBulkhead activityService;
 
     /**
      * http://localhost:8200/userRegisteration
