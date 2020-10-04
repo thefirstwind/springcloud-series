@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 /*
  * @EnableCircuitBreaker
  */
-@EnableHystrix
+//@EnableHystrix
 /*
  * @Import({EnableCircuitBreakerImportSelector.class})
  */
@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
  * @EnableDiscoveryClient
  * @EnableCircuitBreaker
  */
-//@SpringCloudApplication
+@SpringCloudApplication
 public class UserApplication {
 
     @Bean

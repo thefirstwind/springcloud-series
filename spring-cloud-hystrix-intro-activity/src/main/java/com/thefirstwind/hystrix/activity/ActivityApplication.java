@@ -17,6 +17,7 @@ public class ActivityApplication {
     public RestTemplate restTemplate(){
         return new RestTemplate();
     }
+
     public static void main(String[] args) {
         SpringApplication.run(ActivityApplication.class, args);
     }

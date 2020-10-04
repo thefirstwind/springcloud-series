@@ -217,4 +217,85 @@ ok
 ```
 
 
+
+## 2 Hystrix 的熔断
+
+添加 hystrix的依赖
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+
+```
+
+在 activity项目中 的 LoginActivityController.java 中添加 超时 和 失败 用的调试方法
+```java
+@PostMapping("firstLoginActivityTimeout")
+public String firstLoginActivityTimeout(@RequestBody Long userId)  {
+    try {
+        TimeUnit.SECONDS.sleep(RandomUtils.nextInt(5) + 1);
+    }catch(InterruptedException e){
+        e.printStackTrace();
+    }
+    System.out.println("firstLoginActivity 初始化活动 Timeout" + userId);
+    return "ok";
+}
+
+@PostMapping("firstLoginActivityError")
+public String firstLoginActivityError(@RequestBody Long userId)  {
+    throw new RuntimeException("firstLoginActivity 初始化活动 failed " + userId);
+}
+```
+
+在user项目中 的 application.java 中添加 Hystrix的声明
+```
+@SpringCloudApplication
+```
+
+在user项目的controller中添加调用的方法
+```java
+@PostMapping("/userRegisterationTimeout")
+public String userRegistrationTimeout(@RequestBody User user){
+
+    System.out.println("用户注册 成功" + user.getName());
+
+    return activityService.firstLoginTimeout(user.getId());
+}
+
+@PostMapping("/userRegisterationError")
+public String userRegisterationError(@RequestBody User user){
+
+    System.out.println("用户注册 成功" + user.getName());
+
+    return activityService.firstLoginFallback(user.getId());
+}
+```
+
+在user项目中的activityService.java中添加熔断相关的方法
+```java
+@HystrixCommand(
+        commandProperties = {
+                @HystrixProperty(name= "execution.isolation.thread.timeoutInMilliseconds", value="2000")
+        }
+)
+public String firstLoginTimeout(Long userId) {
+
+    return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
+}
+
+@HystrixCommand(fallbackMethod = "firstLoginFallback0")
+public String firstLoginFallback(Long userId) {
+    return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityError", userId, String.class);
+}
+
+public String firstLoginFallback0(Long userId) {
+    return "circrutBreaker";
+}
+```
+
+
+postman 请求验证
+![](_images/491B8F5B-4F6A-4414-8724-2E0956B419E6.png)
+
 https://www.bilibili.com/video/BV1V4411F7my
