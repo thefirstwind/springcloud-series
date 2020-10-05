@@ -438,6 +438,211 @@ jstack 49197 | grep -i hystrix
 
 ### 3.1 添加新项目 activity-api
 
+详细阅读 git show 9db0687ca3624ac1fd89bc2d1fc990aa15dfcc10
+
+
+```xml
+--- a/pom.xml
++++ b/pom.xml
+@@ -28,6 +28,7 @@
+         <module>spring-cloud-eureka-client</module>
+         <module>spring-cloud-eureka-feign-client</module>
++        <module>spring-cloud-hystrix-intro-activity-api</module>
+         <module>spring-cloud-hystrix-intro-activity</module>
+         <module>spring-cloud-hystrix-intro-register</module>
+         <module>spring-cloud-hystrix-intro-user</module>
+```
+
+spring-cloud-hystrix-intro-activity-api
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thefirstwind</groupId>
+    <artifactId>spring-cloud-hystrix-intro-activity-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>spring-cloud-hystrix-intro-activity-api</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.M8</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+           <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-javanica</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+               <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
+```
+
+spring-cloud-hystrix-intro-activity-api/src/main/java/com/thefirstwind/hystrix/activityApi/Config.java
+```java
+package com.thefirstwind.hystrix.activityApi;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan
+public class Config {
+}
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/constant/ActivityURL.java
+
+```java
+diff --git a/
+package com.thefirstwind.hystrix.activityApi.constant;
+ 
+public interface ActivityURL {
+ 
+    String PREFIX = "http://hystrix-intro-activity";
+    String FIRST_LOGIN_ACTIVITY = "/firstLoginActivity";
+    String FIRST_LOGIN_ACTIVITY_TIMEOUT = "/firstLoginActivityTimeout";
+    String FIRST_LOGIN_ACTIVITY_ERROR = "/firstLoginActivityError";
+}
+```
+
+spring-cloud-hystrix-intro-activity-api/src/main/java/com/thefirstwind/hystrix/activityApi/service/LoginActivityService.java
+```java
+package com.thefirstwind.hystrix.activityApi.service;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.thefirstwind.hystrix.activityApi.constant.ActivityURL;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class LoginActivityService {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    public String firstLogin(Long userId) {
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY, userId, String.class);
+    }
+
+    @HystrixCommand(
+            threadPoolKey = "firstLoginTimeout",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "2"),
+                    @HystrixProperty(name = "maxQueueSize", value = "20"),
+            },
+            commandProperties = {
+                    @HystrixProperty(name= "execution.isolation.thread.timeoutInMilliseconds", value="1000")
+            }
+    )
+    public String firstLoginTimeout(Long userId) {
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY_TIMEOUT, userId, String.class);
+    }
+
+    @HystrixCommand(
+            threadPoolKey = "firstLoginFallback",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "1"),
+                    @HystrixProperty(name = "maxQueueSize", value = "20"),
+            },
+            fallbackMethod = "firstLoginFallback0")
+    public String firstLoginFallback(Long userId) {
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY_ERROR, userId, String.class);
+    }
+
+    public String firstLoginFallback0(Long userId) {
+        System.out.println("firstLoginFallback0 circrutBreaker");
+
+        return "circrutBreaker";
+    }
+
+
+}
+```
+
+spring-cloud-hystrix-intro-activity-api/src/main/resources/META-INF/spring.factories
+```factories
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.thefirstwind.hystrix.activityApi.Config
+```
+
+
+spring-cloud-hystrix-intro-user/pom.xml
+```xml
++++ b/spring-cloud-hystrix-intro-user/pom.xml
+
++        <dependency>
++            <groupId>com.thefirstwind</groupId>
++            <artifactId>spring-cloud-hystrix-intro-activity-api</artifactId>
++            <version>0.0.1-SNAPSHOT</version>
++        </dependency>
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/UserApplication.java
+```java
++    @Autowired
++    private LoginActivityService activityService;
+```
+
+
 ## 4 Hystrix与feign结合使用
 <a name="anchor4"><a>
 
