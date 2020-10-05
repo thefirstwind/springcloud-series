@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thefirstwind</groupId>
-    <artifactId>hystrix-intro-register</artifactId>
+    <artifactId>spring-cloud-hystrix-intro-register</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>hystrix-intro-register</name>
+    <name>spring-cloud-hystrix-intro-register</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -2,11 +2,11 @@ package com.thefirstwind.hystrix.user.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.thefirstwind.hystrix.user.constant.ActivityURL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 @Service
 public class ActivityService {
 
@@ -20,7 +20,8 @@ public class ActivityService {
      */
     public String firstLogin(Long userId) {
 
-        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivity", userId, String.class);
+
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY, userId, String.class);
 
     }
 
@@ -31,13 +32,13 @@ public class ActivityService {
     )
     public String firstLoginTimeout(Long userId) {
 
-        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY_TIMEOUT, userId, String.class);
 
     }
 
     @HystrixCommand(fallbackMethod = "firstLoginFallback0")
     public String firstLoginFallback(Long userId) {
-        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityError", userId, String.class);
+        return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY_ERROR, userId, String.class);
     }
 
     public String firstLoginFallback0(Long userId) {

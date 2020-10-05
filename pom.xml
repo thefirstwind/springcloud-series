@@ -28,7 +28,9 @@
         <module>spring-cloud-eureka-client</module>
         <module>spring-cloud-eureka-feign-client</module>
 <!--        <module>spring-cloud-hystrix</module>-->
-        <module>spring-cloud-hystrix-intro</module>
+        <module>spring-cloud-hystrix-intro-activity</module>
+        <module>spring-cloud-hystrix-intro-register</module>
+        <module>spring-cloud-hystrix-intro-user</module>
 
     </modules>
 

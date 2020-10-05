@@ -22,12 +22,12 @@
 
 创建工程3个项目
 ```
-<module>hystrix-intro-register</module>
-<module>hystrix-intro-activity</module>
-<module>hystrix-intro-user</module>
+<module>spring-cloud-hystrix-intro-register</module>
+<module>spring-cloud-hystrix-intro-activity</module>
+<module>spring-cloud-hystrix-intro-user</module>
 ```
 
-### 1.1 hystrix-intro-register
+### 1.1 spring-cloud-hystrix-intro-register
 
 Application.java
 ```java
@@ -62,7 +62,7 @@ eureka:
   server:
     enable-self-preservation: false
 ```
-### 1.2 hystrix-intro-activity
+### 1.2 spring-cloud-hystrix-intro-activity
 
 application.java
 ```java
@@ -118,7 +118,7 @@ eureka:
 ```
 
 
-### 1.3 hystrix-intro-user
+### 1.3 spring-cloud-hystrix-intro-user
 
 application.java
 ```java
