@@ -1,8 +1,8 @@
-package com.thefirstwind.hystrix.user.constant;
+package com.thefirstwind.hystrix.activityApi.constant;
 
 public interface ActivityURL {
 
-    String PREFIX = "http://hystrix-intro-activity/";
+    String PREFIX = "http://hystrix-intro-activity";
     String FIRST_LOGIN_ACTIVITY = "/firstLoginActivity";
     String FIRST_LOGIN_ACTIVITY_TIMEOUT = "/firstLoginActivityTimeout";
     String FIRST_LOGIN_ACTIVITY_ERROR = "/firstLoginActivityError";

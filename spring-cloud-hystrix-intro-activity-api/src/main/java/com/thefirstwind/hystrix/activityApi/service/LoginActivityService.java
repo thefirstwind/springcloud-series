@@ -1,4 +1,4 @@
-package com.thefirstwind.hystrix.user.service;
+package com.thefirstwind.hystrix.activityApi.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class ActivityServiceBulkhead {
+public class LoginActivityService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -22,12 +22,6 @@ public class ActivityServiceBulkhead {
         return restTemplate.postForObject(ActivityURL.PREFIX + ActivityURL.FIRST_LOGIN_ACTIVITY, userId, String.class);
     }
 
-    /**
-     *
-     * HystrixHtreadPoolProperties $ Setter (可以查找配置)
-     * @param userId
-     * @return
-     */
     @HystrixCommand(
             threadPoolKey = "firstLoginTimeout",
             threadPoolProperties = {
@@ -54,6 +48,8 @@ public class ActivityServiceBulkhead {
     }
 
     public String firstLoginFallback0(Long userId) {
+        System.out.println("firstLoginFallback0 circrutBreaker");
+
         return "circrutBreaker";
     }
 

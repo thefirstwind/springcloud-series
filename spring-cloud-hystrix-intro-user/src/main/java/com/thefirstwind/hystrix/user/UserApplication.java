@@ -1,5 +1,6 @@
 package com.thefirstwind.hystrix.user;
 
+import com.thefirstwind.hystrix.activityApi.service.LoginActivityService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
