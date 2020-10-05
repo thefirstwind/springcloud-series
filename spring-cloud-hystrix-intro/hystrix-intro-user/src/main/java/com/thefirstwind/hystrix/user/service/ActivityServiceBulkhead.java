@@ -19,7 +19,7 @@ public class ActivityServiceBulkhead {
      */
     public String firstLogin(Long userId) {
 
-        return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivity", userId, String.class);
+        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivity", userId, String.class);
 
     }
 
@@ -41,7 +41,7 @@ public class ActivityServiceBulkhead {
     )
     public String firstLoginTimeout(Long userId) {
 
-        return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
+        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
 
     }
 
@@ -53,7 +53,7 @@ public class ActivityServiceBulkhead {
             },
             fallbackMethod = "firstLoginFallback0")
     public String firstLoginFallback(Long userId) {
-        return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityError", userId, String.class);
+        return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityError", userId, String.class);
     }
 
     public String firstLoginFallback0(Long userId) {

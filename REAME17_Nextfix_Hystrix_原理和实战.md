@@ -436,6 +436,8 @@ jstack 49197 | grep -i hystrix
 ## 3 服务间调用 最佳实践
 <a name="anchor3"><a>
 
+### 3.1 添加新项目 activity-api
+
 ## 4 Hystrix与feign结合使用
 <a name="anchor4"><a>
 

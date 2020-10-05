@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thefirstwind</groupId>
-    <artifactId>spring-cloud-hystrix-intro-activity</artifactId>
+    <artifactId>hystrix-intro-activity</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>spring-cloud-hystrix-intro-activity</name>
+    <name>hystrix-intro-activity</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

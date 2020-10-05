@@ -1,11 +1,14 @@
 server:
-  port: 8100
+  port: 8200
 spring:
   application:
-    name: spring-cloud-hystrix-intro-activity
+    name: hystrix-intro-user
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8000/eureka}
   instance:
     preferIpAddress: true
+management:
+  security:
+    enabled: false
