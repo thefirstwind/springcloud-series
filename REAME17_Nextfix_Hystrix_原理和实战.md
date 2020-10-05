@@ -642,9 +642,69 @@ spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/User
 +    private LoginActivityService activityService;
 ```
 
+总结， 如果不用feign的话，现在的写法就挺好的。
+* 1 可以直接使用 ribbon和 Hystrix，代码风格比较自由
+* 2 可以发挥出ribbon和 hystrix的全部特性
+
+缺点是要服务提供方要写样板代码
 
 ## 4 Hystrix与feign结合使用
 <a name="anchor4"><a>
+
+### 4.1 创建一个最基础的Feign请求
+
+spring-cloud-hystrix-intro-activity-api/src/main/java/com/thefirstwind/hystrix/activityApi/constant/ActivityURL.java
+```java
+ public interface ActivityURL {
+ 
+     String PREFIX = "http://hystrix-intro-activity";
++    String FEIGN = "/feign";
+     String FIRST_LOGIN_ACTIVITY = "/firstLoginActivity";
+     String FIRST_LOGIN_ACTIVITY_TIMEOUT = "/firstLoginActivityTimeout";
+     String FIRST_LOGIN_ACTIVITY_ERROR = "/firstLoginActivityError";
+
+```
+
+spring-cloud-hystrix-intro-user/pom.xml
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/UserApplication.java
+```java
+@EnableFeignClients
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feign/FeignRegisterationController.java
+```java
+     @Autowired
+-    private ActivityServiceBulkhead activityService;
++    private IFeignActivityService activityService;
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feign/IFeignActivityService.java
+```java
++import org.springframework.cloud.openfeign.FeignClient;
++import org.springframework.web.bind.annotation.PostMapping;
++import org.springframework.web.bind.annotation.RequestBody;
++
++@FeignClient("hystrix-intro-activity")
++public interface IFeignActivityService {
++
++    @PostMapping("firstLoginActivity")
++    String firstLoginActivity(@RequestBody Long userId);
++
++    @PostMapping("firstLoginActivityTimeout")
++    String firstLoginActivityTimeout(@RequestBody Long userId);
++
++    @PostMapping("firstLoginActivityError")
++    String firstLoginActivityError(@RequestBody Long userId);
+}
+```
+
 
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
 <a name="anchor5"><a>

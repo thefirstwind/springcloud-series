@@ -4,10 +4,12 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.thefirstwind.hystrix.activityApi.constant.ActivityURL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+//@ConditionalOnBean
 public class LoginActivityService implements ILoginActivityService{
 
     @Autowired

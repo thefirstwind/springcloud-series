@@ -1,9 +1,7 @@
-package com.thefirstwind.hystrix.user.controller;
+package com.thefirstwind.hystrix.user.feign;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.thefirstwind.hystrix.activityApi.service.ILoginActivityService;
 import com.thefirstwind.hystrix.user.entity.User;
+import com.thefirstwind.hystrix.user.service.ActivityServiceBulkhead;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v2")
-public class RegisterationControllerV2 {
+@RequestMapping("/feign")
+public class FeignRegisterationController {
 
     @Autowired
-    private ILoginActivityService activityService;
+//    private FeignActivityService activityService;
+    private IFeignActivityService activityService;
 
     /**
      * http://localhost:8200/userRegisteration
@@ -28,25 +27,15 @@ public class RegisterationControllerV2 {
 
         System.out.println("用户注册 成功" + user.getName());
 
-        return activityService.firstLogin(user.getId());
+        return activityService.firstLoginActivity(user.getId());
     }
 
-    @HystrixCommand(
-            threadPoolKey = "firstLoginTimeout",
-            threadPoolProperties = {
-                    @HystrixProperty(name = "coreSize", value = "2"),
-                    @HystrixProperty(name = "maxQueueSize", value = "20"),
-            },
-            commandProperties = {
-                    @HystrixProperty(name= "execution.isolation.thread.timeoutInMilliseconds", value="1000")
-            }
-    )
     @PostMapping("/userRegisterationTimeout")
     public String userRegistrationTimeout(@RequestBody User user){
 
         System.out.println("用户注册 成功" + user.getName());
 
-        return activityService.firstLoginTimeout(user.getId());
+        return activityService.firstLoginActivityTimeout(user.getId());
     }
 
     @PostMapping("/userRegisterationError")
@@ -54,8 +43,9 @@ public class RegisterationControllerV2 {
 
         System.out.println("用户注册 成功" + user.getName());
 
-        return activityService.firstLoginFallback(user.getId());
+        return activityService.firstLoginActivityError(user.getId());
     }
+
 
 
 }
