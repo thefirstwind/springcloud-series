@@ -22,12 +22,12 @@
 
 创建工程3个项目
 ```
-<module>spring-cloud-hystrix-intro-register</module>
-<module>spring-cloud-hystrix-intro-activity</module>
-<module>spring-cloud-hystrix-intro-user</module>
+<module>hystrix-intro-register</module>
+<module>hystrix-intro-activity</module>
+<module>hystrix-intro-user</module>
 ```
 
-### 1.1 spring-cloud-hystrix-intro-register
+### 1.1 hystrix-intro-register
 
 Application.java
 ```java
@@ -62,7 +62,7 @@ eureka:
   server:
     enable-self-preservation: false
 ```
-### 1.2 spring-cloud-hystrix-intro-activity
+### 1.2 hystrix-intro-activity
 
 application.java
 ```java
@@ -108,7 +108,7 @@ server:
   port: 8100
 spring:
   application:
-    name: spring-cloud-hystrix-intro-activity
+    name: hystrix-intro-activity
 eureka:
   client:
     serviceUrl:
@@ -118,7 +118,7 @@ eureka:
 ```
 
 
-### 1.3 spring-cloud-hystrix-intro-user
+### 1.3 hystrix-intro-user
 
 application.java
 ```java
@@ -174,7 +174,7 @@ public class ActivityService {
 
     public ResponseEntity<String> firstLogin(Long userId) {
 
-        return restTemplate.postForEntity("http://spring-cloud-hystrix-intro-activity/firstLoginActivity", userId, String.class);
+        return restTemplate.postForEntity("http://hystrix-intro-activity/firstLoginActivity", userId, String.class);
     }
 }
 
@@ -194,7 +194,7 @@ server:
   port:8200
 spring:
   application:
-    name:spring-cloud-hystrix-intro-user
+    name:hystrix-intro-user
 eureka:
   client:
     server-url:
@@ -287,12 +287,12 @@ public String userRegisterationError(@RequestBody User user){
 )
 public String firstLoginTimeout(Long userId) {
 
-    return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
+    return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityTimeout", userId, String.class);
 }
 
 @HystrixCommand(fallbackMethod = "firstLoginFallback0")
 public String firstLoginFallback(Long userId) {
-    return restTemplate.postForObject("http://spring-cloud-hystrix-intro-activity/firstLoginActivityError", userId, String.class);
+    return restTemplate.postForObject("http://hystrix-intro-activity/firstLoginActivityError", userId, String.class);
 }
 
 public String firstLoginFallback0(Long userId) {
@@ -339,7 +339,7 @@ $ jstack 37524 | grep -i hystrix
 "HystrixTimer-3" #87 daemon prio=5 os_prio=31 tid=0x00007fbe0c39c000 nid=0x8003 waiting on condition [0x00007000130ba000]
 "hystrix-ActivityService-2" #86 daemon prio=5 os_prio=31 tid=0x00007fbe0d4ab000 nid=0x7e03 waiting on condition [0x0000700012fb7000]
 "HystrixTimer-2" #85 daemon prio=5 os_prio=31 tid=0x00007fbe0d4a8000 nid=0x7c03 waiting on condition [0x0000700012eb4000]
-"NFLoadBalancer-PingTimer-spring-cloud-hystrix-intro-activity" #78 daemon prio=5 os_prio=31 tid=0x00007fbe0d2b4000 nid=0x7503 in Object.wait() [0x00007000129a5000]
+"NFLoadBalancer-PingTimer-hystrix-intro-activity" #78 daemon prio=5 os_prio=31 tid=0x00007fbe0d2b4000 nid=0x7503 in Object.wait() [0x00007000129a5000]
 "hystrix-ActivityService-1" #76 daemon prio=5 os_prio=31 tid=0x00007fbe0cc74000 nid=0x7213 waiting on condition [0x000070001279f000]
 "HystrixTimer-1" #75 daemon prio=5 os_prio=31 tid=0x00007fbe0db52000 nid=0xa70f waiting on condition [0x0000700010842000]
 ```
@@ -393,7 +393,7 @@ jstack 49197 | grep -i hystrix
 "HystrixTimer-3" #88 daemon prio=5 os_prio=31 tid=0x00007ffa3aa63800 nid=0x8003 waiting on condition [0x000070000a1e6000]
 "hystrix-firstLoginTimeout-2" #87 daemon prio=5 os_prio=31 tid=0x00007ffa3bd2a000 nid=0x7e03 waiting on condition [0x000070000a0e3000]
 "HystrixTimer-2" #86 daemon prio=5 os_prio=31 tid=0x00007ffa3c063000 nid=0xa90b waiting on condition [0x0000700009fe0000]
-"NFLoadBalancer-PingTimer-spring-cloud-hystrix-intro-activity" #77 daemon prio=5 os_prio=31 tid=0x00007ffa3c56f800 nid=0x8703 in Object.wait() [0x0000700009bd4000]
+"NFLoadBalancer-PingTimer-hystrix-intro-activity" #77 daemon prio=5 os_prio=31 tid=0x00007ffa3c56f800 nid=0x8703 in Object.wait() [0x0000700009bd4000]
 "hystrix-firstLoginTimeout-1" #75 daemon prio=5 os_prio=31 tid=0x00007ffa3a814800 nid=0x8903 waiting on condition [0x00007000099ce000]
 "HystrixTimer-1" #74 daemon prio=5 os_prio=31 tid=0x00007ffa3b325000 nid=0x8b13 waiting on condition [0x00007000098cb000]
 ```
