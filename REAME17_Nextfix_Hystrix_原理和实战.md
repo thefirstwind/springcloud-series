@@ -705,6 +705,18 @@ spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feig
 }
 ```
 
+总结：开始使用Feign
+* 1 引入相关依赖
+* 2 写上相关注解
+* 3 写接口，直接注入接口
+
+可以进行服务间的调用
+现在存在的问题是，无法做断路器相关的工作，比如降级、
+
+```shell script
+git show bdd08210bdd0fc1bf46ddbc7b1d0a5e126b07e05
+```
+
 
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
 <a name="anchor5"><a>

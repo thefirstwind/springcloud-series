@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("hystrix-intro-activity")
+@FeignClient(value="hystrix-intro-activity", fallback = FeignActivityServiceFallback.class)
 public interface IFeignActivityService {
 
     @PostMapping("firstLoginActivity")

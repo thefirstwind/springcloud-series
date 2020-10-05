@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ActivityApplication {
+public class HystrixActivityApplication {
 
     @Bean
     @LoadBalanced
@@ -19,7 +19,7 @@ public class ActivityApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(ActivityApplication.class, args);
+        SpringApplication.run(Hystrix  ActivityApplication.class, args);
     }
 
 }

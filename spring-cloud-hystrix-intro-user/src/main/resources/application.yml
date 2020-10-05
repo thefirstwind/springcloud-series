@@ -12,3 +12,16 @@ eureka:
 management:
   security:
     enabled: false
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+
+
