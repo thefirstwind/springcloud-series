@@ -19,7 +19,7 @@ public class HystrixActivityApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Hystrix  ActivityApplication.class, args);
+        SpringApplication.run(HystrixActivityApplication.class, args);
     }
 
 }

@@ -717,6 +717,69 @@ spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feig
 git show bdd08210bdd0fc1bf46ddbc7b1d0a5e126b07e05
 ```
 
+### 4.2 Feign 和 hystrix的结合使用(通用配置)
+
+spring-cloud-hystrix-intro-user/src/main/resources/application.yml
+```yaml
+
+hystrix:
+  command:
+     default:
+       execution:
+         isolation:
+           thread:
+             timeoutInMilliseconds: 5
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feign/FeignActivityServiceFallbackFactory.java
+
+```java
+package com.thefirstwind.hystrix.user.feign;
+
+import feign.hystrix.FallbackFactory;
+import org.springframework.stereotype.Component;
+
+@Component
+public class FeignActivityServiceFallbackFactory implements FallbackFactory<IFeignActivityService> {
+
+    @Override
+    public IFeignActivityService create(Throwable cause) {
+        return new IFeignActivityService(){
+
+            @Override
+            public String firstLoginActivity(Long userId) {
+                return "feign 降级 5ms";
+            }
+
+            @Override
+            public String firstLoginActivityTimeout(Long userId) {
+                return "feign fallbackFactory of firstLoginActivityTimeout:" + cause.getMessage();
+            }
+
+            @Override
+            public String firstLoginActivityError(Long userId) {
+                return null;
+            }
+        };
+    }
+}
+
+```
+
+spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feign/IFeignActivityService.java
+
+```java
+ 
+-@FeignClient(value="hystrix-intro-activity", fallback = FeignActivityServiceFallback.class)
++@FeignClient(
++        value="hystrix-intro-activity",
++        fallbackFactory = FeignActivityServiceFallbackFactory.class
++)
+ public interface IFeignActivityService {
+ 
+```
+
+### 4.3 Feign 和 hystrix的结合使用(个性设置)
 
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
 <a name="anchor5"><a>
