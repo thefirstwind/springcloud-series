@@ -821,4 +821,41 @@ hystrix 提供了2中监控的方式
 
 在application中添加 @EnableHystrixDashboard
 
+监控  
+http://localhost:8200/hystrix.stream
+http://localhost:8100/hystrix.stream
 
+
+监控的要保证已经引入了 hystrix 和 actuator 的依赖
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+```
+
+application.yml 中加入
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, info, health
+      base-path: /
+```
+
+确认 http://localhost:8200/hystrix.stream
+![](_images/B52BE0A4-3276-45D1-8295-355BDC028975.png)
+
+访问 http://localhost:8080/hystrix/
+
+![](_images/E4A015DB-D7D2-4D6C-AD81-7E621D10D18F.png)
+
+监控页面如下
+
+![](_images/D280FB4F-BE86-4425-8F68-106A365EBF6C.png)

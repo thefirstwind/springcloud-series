@@ -10,9 +10,11 @@ eureka:
   instance:
     preferIpAddress: true
 management:
-  security:
-    enabled: false
-
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, info, health
+      base-path: /
 feign:
   hystrix:
     enabled: true
@@ -29,3 +31,4 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 10
+
