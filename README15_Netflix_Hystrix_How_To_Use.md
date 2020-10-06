@@ -1217,3 +1217,5 @@ After migrating, users of a library will be able to access the HystrixCommands d
 * [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
 * [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
+* [Netflix Hystrix Configuration](README16_Netflix_Hystrix_Configuration.md)
+* [Netflix Hystrix 原理和实战](REAME17_Nextfix_Hystrix_原理和实战.md)
