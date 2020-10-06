@@ -781,6 +781,24 @@ spring-cloud-hystrix-intro-user/src/main/java/com/thefirstwind/hystrix/user/feig
 
 ### 4.3 Feign 和 hystrix的结合使用(个性设置)
 
+```yaml
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+    IFeignActivityService#firstLoginActivity(Long):
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10
+```
+
+
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
+
+
 <a name="anchor5"><a>
 

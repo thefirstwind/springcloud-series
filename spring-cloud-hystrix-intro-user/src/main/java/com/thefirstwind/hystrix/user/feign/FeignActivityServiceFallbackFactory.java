@@ -12,7 +12,7 @@ public class FeignActivityServiceFallbackFactory implements FallbackFactory<IFei
 
             @Override
             public String firstLoginActivity(Long userId) {
-                return "feign 降级 5ms";
+                return "feign 降级 10ms";
             }
 
             @Override

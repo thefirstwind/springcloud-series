@@ -23,4 +23,9 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5
+            timeoutInMilliseconds: 1000
+    IFeignActivityService#firstLoginActivity(Long):
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10
