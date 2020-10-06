@@ -1,0 +1,34 @@
+server:
+  port: 8200
+spring:
+  application:
+    name: hystrix-intro-user
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8000/eureka}
+  instance:
+    preferIpAddress: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, turbine.stream, info, health
+      base-path: /
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+    IFeignActivityService#firstLoginActivity(Long):
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10
+
