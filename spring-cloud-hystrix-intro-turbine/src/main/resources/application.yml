@@ -1,0 +1,23 @@
+server:
+  port: 8600
+spring:
+  application:
+    name: hystrix-intro-turbine
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8000/eureka}
+  instance:
+    preferIpAddress: true
+turbine:
+#  aggregator:
+#    clusterConfig: hystrix-intro-user
+  appConfig: hystrix-intro-user
+  cluster-name-expression: "'default'"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, turbine.stream, info, health
+      base-path: /

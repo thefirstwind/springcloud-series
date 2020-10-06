@@ -33,6 +33,7 @@
         <module>spring-cloud-hystrix-intro-register</module>
         <module>spring-cloud-hystrix-intro-user</module>
         <module>spring-cloud-hystrix-intro-monitor</module>
+        <module>spring-cloud-hystrix-intro-turbine</module>
 
     </modules>
 

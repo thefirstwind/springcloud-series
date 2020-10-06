@@ -800,6 +800,7 @@ hystrix:
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
 <a name="anchor5"><a>
 
+
 hystrix 提供了2中监控的方式
 
 * 1 通过Http
@@ -808,7 +809,7 @@ hystrix 提供了2中监控的方式
 
 ![](_images/227C66EB-6047-4D0B-8798-6681C2417754.png)
 
-
+### 5.1 部署一个监控服务
 创建新项目 spring-cloud-hystrix-intro-monitor
 
 添加pom依赖
@@ -859,3 +860,56 @@ management:
 监控页面如下
 
 ![](_images/D280FB4F-BE86-4425-8F68-106A365EBF6C.png)
+
+### 5.2 集群环境下服务监控方式
+
+添加新项目：spring-cloud-hystrix-intro-turbine
+
+添加pom依赖
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-turbine</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+```
+
+添加application.yml
+```yaml
+server:
+  port: 8600
+spring:
+  application:
+    name: hystrix-intro-turbine
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8000/eureka}
+  instance:
+    preferIpAddress: true
+turbine:
+#  aggregator:
+#    clusterConfig: hystrix-intro-user
+  appConfig: hystrix-intro-user
+  cluster-name-expression: "'default'"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, turbine.stream, info, health
+      base-path: /
+```
+
+访问 http://localhost:8600/turbine.stream
+
+![](_images/A57A16AE-D728-4540-AB88-AD0E5C68C661.png)
+
+
+访问 http://localhost:8080/hystrix/  
+![](_images/FEF189BA-135E-4813-9816-9290BB27640C.png)
+
+结束！
