@@ -32,6 +32,7 @@
         <module>spring-cloud-hystrix-intro-activity</module>
         <module>spring-cloud-hystrix-intro-register</module>
         <module>spring-cloud-hystrix-intro-user</module>
+        <module>spring-cloud-hystrix-intro-monitor</module>
 
     </modules>
 

@@ -798,7 +798,27 @@ hystrix:
 
 
 ## 5 如何监控 Hystrix来了解服务间调用的健康状况
-
-
 <a name="anchor5"><a>
+
+hystrix 提供了2中监控的方式
+
+* 1 通过Http
+* 2 通过消息总线
+
+
+![](_images/227C66EB-6047-4D0B-8798-6681C2417754.png)
+
+
+创建新项目 spring-cloud-hystrix-intro-monitor
+
+添加pom依赖
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+</dependency>
+```
+
+在application中添加 @EnableHystrixDashboard
+
 
