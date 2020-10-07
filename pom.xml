@@ -34,6 +34,7 @@
         <module>spring-cloud-hystrix-intro-user</module>
         <module>spring-cloud-hystrix-intro-monitor</module>
         <module>spring-cloud-hystrix-intro-turbine</module>
+        <module>spring-cloud-hystrix-offical-how-to-use</module>
 
     </modules>
 

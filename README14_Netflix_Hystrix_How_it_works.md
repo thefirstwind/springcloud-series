@@ -12,25 +12,26 @@
 * 7 [Request Caching](#Request_Caching)<!-- @IGNORE PREVIOUS: anchor -->
 
 
-## 1 Flow Chart <a name="FlowChart"><a>
+<a name="FlowChart"><a>
+## 1 Flow Chart
 The following diagram shows what happens when you make a request to a service dependency by means of Hystrix:
 
 ![](_images/hystrix-command-flow-chart.png)
 
 The following sections will explain this flow in greater detail:
 
-* [Construct a HystrixCommand or HystrixObservableCommand Object](#anchor_1_1)<!-- @IGNORE PREVIOUS: anchor -->
-* [Execute the Command](#anchor_1_2)<!-- @IGNORE PREVIOUS: anchor -->
-* [Is the Response Cached?](#anchor_1_3)<!-- @IGNORE PREVIOUS: anchor -->
-* [Is the Circuit Open?](#anchor_1_4)<!-- @IGNORE PREVIOUS: anchor -->
-* [Is the Thread Pool/Queue/Semaphore Full?](#anchor_1_5)<!-- @IGNORE PREVIOUS: anchor -->
-* [HystrixObservableCommand.construct() or HystrixCommand.run()](#anchor_1_6)<!-- @IGNORE PREVIOUS: anchor -->
-* [Calculate Circuit Health](#anchor_1_7)<!-- @IGNORE PREVIOUS: anchor -->
-* [Get the Fallback](#anchor_1_8)<!-- @IGNORE PREVIOUS: anchor -->
-* [Return the Successful Response](#anchor_1_9)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.1 [Construct a HystrixCommand or HystrixObservableCommand Object](#anchor_1_1)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.2 [Execute the Command](#anchor_1_2)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.3 [Is the Response Cached?](#anchor_1_3)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.4 [Is the Circuit Open?](#anchor_1_4)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.5 [Is the Thread Pool/Queue/Semaphore Full?](#anchor_1_5)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.6 [HystrixObservableCommand.construct() or HystrixCommand.run()](#anchor_1_6)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.7 [Calculate Circuit Health](#anchor_1_7)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.8 [Get the Fallback](#anchor_1_8)<!-- @IGNORE PREVIOUS: anchor -->
+* 1.9 [Return the Successful Response](#anchor_1_9)<!-- @IGNORE PREVIOUS: anchor -->
 
-
-### 1.1 Construct a HystrixCommand or HystrixObservableCommand Object <a name="anchor_1_1"><a>
+<a name="anchor_1_1"><a>
+### 1.1 Construct a HystrixCommand or HystrixObservableCommand Object
 
 The first step is to construct a HystrixCommand or HystrixObservableCommand object to represent the request you are making to the dependency. Pass the constructor any arguments that will be needed when the request is made.
 
@@ -42,7 +43,8 @@ Construct a HystrixObservableCommand object if the dependency is expected to ret
 
 > HystrixObservableCommand command = new HystrixObservableCommand(arg1, arg2);
 
-### 1.2 Execute the Command <a name="anchor_1_2"><a>
+<a name="anchor_1_2"><a>
+### 1.2 Execute the Command
 There are four ways you can execute the command, by using one of the following four methods of your Hystrix command object (the first two are only applicable to simple HystrixCommand objects and are not available for the HystrixObservableCommand):
 
 * execute() — blocks, then returns the single response received from the dependency (or throws an exception in case of an error)
@@ -60,12 +62,14 @@ Observable<K> ocValue = command.toObservable();    //cold observable
 The synchronous call execute() invokes queue().get(). queue() in turn invokes toObservable().toBlocking().toFuture(). Which is to say that ultimately every HystrixCommand is backed by an Observable implementation, even those commands that are intended to return single, simple values.
 
 
-### 1.3 Is the Response Cached? <a name="anchor_1_3"><a>
+<a name="anchor_1_3"><a>
+### 1.3 Is the Response Cached?
 
 If request caching is enabled for this command, and if the response to the request is available in the cache, this cached response will be immediately returned in the form of an Observable. (See “Request Caching” below.)
 
 
-### 1.4 Is the Circuit Open? <a name="anchor_1_4"><a>
+<a name="anchor_1_4"><a>
+### 1.4 Is the Circuit Open?
 
 When you execute the command, Hystrix checks with the circuit-breaker to see if the circuit is open.
 
@@ -74,12 +78,14 @@ If the circuit is open (or “tripped”) then Hystrix will not execute the comm
 If the circuit is closed then the flow proceeds to (5) to check if there is capacity available to run the command.
 
 
-### 1.5 Is the Thread Pool/Queue/Semaphore Full? <a name="anchor_1_5"><a>
+<a name="anchor_1_5"><a>
+### 1.5 Is the Thread Pool/Queue/Semaphore Full?
 
 If the thread-pool and queue (or semaphore, if not running in a thread) that are associated with the command are full then Hystrix will not execute the command but will immediately route the flow to (8) Get the Fallback.
 
 
-### 1.6 HystrixObservableCommand.construct() or HystrixCommand.run() <a name="anchor_1_6"><a>
+<a name="anchor_1_6"><a>
+### 1.6 HystrixObservableCommand.construct() or HystrixCommand.run()
 
 Here, Hystrix invokes the request to the dependency by means of the method you have written for this purpose, one of the following:
 
@@ -93,14 +99,16 @@ Please note that there's no way to force the latent thread to stop work - the be
 If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting. In the case of run(), Hystrix returns an Observable that emits the single response and then makes an onCompleted notification; in the case of construct() Hystrix returns the same Observable returned by construct().
 
 
-### 1.7 Calculate Circuit Health <a name="anchor_1_7"><a>
+<a name="anchor_1_7"><a>
+### 1.7 Calculate Circuit Health
 
 Hystrix reports successes, failures, rejections, and timeouts to the circuit breaker, which maintains a rolling set of counters that calculate statistics.
 
 It uses these stats to determine when the circuit should “trip,” at which point it short-circuits any subsequent requests until a recovery period elapses, upon which it closes the circuit again after first checking certain health checks.
 
 
-### 1.8 Get the Fallback <a name="anchor_1_8"><a>
+<a name="anchor_1_8"><a>
+### 1.8 Get the Fallback
 
 Hystrix tried to revert to your fallback whenever a command execution fails: when an exception is thrown by construct() or run() (6.), when the command is short-circuited because the circuit is open (4.), when the command’s thread pool and queue or semaphore are at capacity (5.), or when the command has exceeded its timeout length.
 
@@ -121,7 +129,8 @@ The result of a failed or nonexistent fallback will differ depending on how you 
 * observe() — returns an Observable that, when you subscribe to it, will immediately terminate by calling the subscriber’s onError method
 * toObservable() — returns an Observable that, when you subscribe to it, will terminate by calling the subscriber’s onError method
 
-### 1.9 Return the Successful Response <a name="anchor_1_9"><a>
+<a name="anchor_1_9"><a>
+### 1.9 Return the Successful Response
 
 If the Hystrix command succeeds, it will return the response or responses to the caller in the form of an Observable. Depending on how you have invoked the command in step 2, above, this Observable may be transformed before it is returned to you:
 
@@ -132,11 +141,13 @@ If the Hystrix command succeeds, it will return the response or responses to the
 * observe() — subscribes to the Observable immediately and begins the flow that executes the command; returns an Observable that, when you subscribe to it, replays the emissions and notifications
 * toObservable() — returns the Observable unchanged; you must subscribe to it in order to actually begin the flow that leads to the execution of the command
 
-## 2 Sequence Diagram <a name="SequenceDiagram"><a>
+<a name="SequenceDiagram"><a>
+## 2 Sequence Diagram
 @adrianb11 has kindly provided a [sequence diagram](https://design.codelytics.io/hystrix/how-it-works) demonstrating the above flows
 
 
-## 3 Circuit Breaker <a name="CircuitBreaker"><a>
+<a name="CircuitBreaker"><a>
+## 3 Circuit Breaker
 
 The following diagram shows how a HystrixCommand or HystrixObservableCommand interacts with a HystrixCircuitBreaker and its flow of logic and decision-making, including how the counters behave in the circuit breaker.
 
@@ -150,13 +161,15 @@ The precise way that the circuit opening and closing occurs is as follows:
 * 4 While it is open, it short-circuits all requests made against that circuit-breaker.
 * 5 After some amount of time (HystrixCommandProperties.circuitBreakerSleepWindowInMilliseconds()), the next single request is let through (this is the HALF-OPEN state). If the request fails, the circuit-breaker returns to the OPEN state for the duration of the sleep window. If the request succeeds, the circuit-breaker transitions to CLOSED and the logic in 1. takes over again.
 
-## 4 Isolation <a name="Isolation"><a>
+<a name="Isolation"><a>
+## 4 Isolation
 
 Hystrix employs the bulkhead pattern to isolate dependencies from each other and to limit concurrent access to any one of them.
 
 ![](_images/soa-5-isolation-focused-640.png)
 
-## 5 Threads & Thread Pools <a name="Threads_Thread_Pools"><a>
+<a name="Threads_Thread_Pools"><a>
+## 5 Threads & Thread Pools
 Clients (libraries, network calls, etc) execute on separate threads. This isolates them from the calling thread (Tomcat thread pool) so that the caller may “walk away” from a dependency call that is taking too long.
 
 Hystrix uses separate, per-dependency thread pools as a way of constraining any given dependency so latency on the underlying executions will saturate the available threads only in that pool.
@@ -241,7 +254,8 @@ Semaphore rejection will start once the limit is hit but the threads filling the
 
 
 
-## 6 Request Collapsing <a name="Request_Collapsing"><a>
+<a name="Request_Collapsing"><a>
+## 6 Request Collapsing
 
 You can front a HystrixCommand with a request collapser (HystrixCollapser is the abstract parent) with which you can collapse multiple requests into a single back-end dependency call.
 
@@ -301,7 +315,8 @@ If, however, a particular command is heavily utilized concurrently and can batch
 
 
 
-## 7 Request Caching <a name="Request_Caching"><a>
+<a name="Request_Caching"><a>
+## 7 Request Caching
 
 HystrixCommand and HystrixObservableCommand implementations can define a cache key which is then used to de-dupe calls within a request context in a concurrent-aware manner.
 
@@ -352,3 +367,5 @@ If Hystrix didn’t implement the request cache functionality then each command 
 * [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
 * [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
+* [Netflix Hystrix Configuration](README16_Netflix_Hystrix_Configuration.md)
+* [Netflix Hystrix 原理和实战](REAME17_Nextfix_Hystrix_原理和实战.md)
