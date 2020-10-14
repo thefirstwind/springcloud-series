@@ -1,0 +1,19 @@
+server:
+  port: 8181
+
+spring:
+  application:
+    name: catalog-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8000/eureka}
+  instance:
+    preferIpAddress: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, turbine.stream, info, health
+      base-path: /
