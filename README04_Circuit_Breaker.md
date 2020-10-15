@@ -197,6 +197,44 @@ public Optional<ProductInventoryResponse> getProductInventoryByCode(String produ
 可以通过 http://localhost:8181/actuator/hystrix.stream 来监控
 
 
+## 4 验证结果
+创建一个 catalog-service 的 instance
+
+创建两个 inventory-service 的 instance
+
+在 catalog-service 中 使用 RestTemplate + Ribbon Loadbalance 随机访问 inventory-service
+
+``` shell script
+export JAVA_HOME=$JAVA_8_HOME
+export PATH=$JAVA_HOME/bin:$PATH
+mvn clean install
+
+docker-compose down 
+docker-compose up --build
+
+java -jar -Dserver.port=8181 catalog-service/target/catalog-service.jar &
+
+java -jar -Dserver.port=8281 inventory-service/target/inventory-service.jar &
+
+java -jar -Dserver.port=8282 inventory-service/target/inventory-service.jar &
+```
+
+### 4.1 访问注册中心，确认服务已经注册上
+http://localhost:8761/
+
+![](_images/314FBF24-50E9-4F59-B28E-4596D4D4D523.png)
+
+### 4.2 访问 hystrix.stream 流的信息是否正常
+http://localhost:8181/actuator/hystrix.stream
+
+![](_images/9384C30B-BAE9-4FC5-A4DB-4F10238ACE14.png)
+
+### 4.3 进入 hystrix dashboard
+http://localhost:8788/hystrix
+![](_images/A2194CFF-9562-40BA-A5F6-D7163B612952.png)
+
+
+
 ##  为了加深对hystrix的理解可以参考以下2篇文章
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
 * [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
@@ -216,7 +254,5 @@ public Optional<ProductInventoryResponse> getProductInventoryByCode(String produ
 * [Spring Cloud Eureka and Feign](README13_Spring_Cloud_Eureka.md)
 * [Netflix Hystrix How It Works](README14_Netflix_Hystrix_How_it_works.md)
 * [Netflix Hystrix How to Use](README15_Netflix_Hystrix_How_To_Use.md)
-* [Netflix Hystrix Configuration](README16_Netflix_Hystrix_Configuration.md)
-* [Netflix Hystrix 原理和实战](REAME17_Nextfix_Hystrix_原理和实战.md)
 * [Netflix Hystrix Configuration](README16_Netflix_Hystrix_Configuration.md)
 * [Netflix Hystrix 原理和实战](REAME17_Nextfix_Hystrix_原理和实战.md)

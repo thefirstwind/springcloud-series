@@ -335,7 +335,7 @@ public class ProductService {
 mvn clean install
 
 docker-compose down 
-docker-compose up --buld
+docker-compose up --build
 
 java -jar -Dserver.port=8181 catalog-service/target/catalog-service.jar &
 

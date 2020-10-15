@@ -2,6 +2,7 @@ package com.thefirstwind.catalogservice.services;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.thefirstwind.catalogservice.utils.MyThreadLocalsHolder;
 import com.thefirstwind.catalogservice.web.models.ProductInventoryResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,19 @@ public class InventoryServiceClient {
 //            }
     )
     public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode){
+        log.info("CorrelationID: "+ MyThreadLocalsHolder.getCorrelationId());
         ResponseEntity<ProductInventoryResponse> itemResponseEntity =
                 restTemplate.getForEntity("http://inventory-service/api/inventory/{code}",
                 ProductInventoryResponse.class,
                 productCode);
+
+        //Simulate Delay
+//        try {
+//            java.util.concurrent.TimeUnit.SECONDS.sleep(5);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         if(itemResponseEntity.getStatusCode() == HttpStatus.OK){
             return Optional.ofNullable(itemResponseEntity.getBody());
         }else{
@@ -41,8 +51,10 @@ public class InventoryServiceClient {
         }
     }
 
+    @SuppressWarnings("unused")
     public Optional<ProductInventoryResponse> getDefaultProductInventoryByCode(String productCode){
         log.info("Returning default ProductInventoryByCode for productCode: "+productCode);
+        log.info("CorrelationID: "+ MyThreadLocalsHolder.getCorrelationId());
         ProductInventoryResponse response = new ProductInventoryResponse();
         response.setProductCode(productCode);
         response.setAvailableQuantity(50);
