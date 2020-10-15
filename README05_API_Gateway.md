@@ -11,9 +11,23 @@
 > In this post, we will learn how to create API Gateway using Spring Cloud Zuul Proxy.
 
 
-## Why do we need API Gateway?
+## 1 Why do we need API Gateway?
+> API Gateway, aka Edge Service, provides a unified interface for a set  
+> of microservices so that clients no need to know about all the details  
+> of microservices internals. However, there are some pros and cons of  
+> using API Gateway pattern in microservices architecture.
 
-## Implementing API Gateway using Spring Cloud Zuul Proxy
+### 1.1  Pros:
+Provides easier interface to clients
+Can be used to prevent exposing the internal microservices structure to clients
+Allows to refactor microservices without forcing the clients to refactor consuming logic
+Can centralize cross-cutting concerns like security, monitoring, rate limiting etc
+
+### 1.2 Cons:
+It could become a single point of failure if proper measures are not taken to make it highly available
+Knowledge of various microservice API may creep into API Gateway
+
+## 2 Implementing API Gateway using Spring Cloud Zuul Proxy
 ### 2.1 添加pom依赖
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -352,6 +366,15 @@ public class AuthHeaderFilter extends ZuulFilter {
 
 ```
 
+```properties
+spring.application.name=shoppingcart-ui
+server.port=8080
+spring.cloud.config.uri=http://localhost:8888
+
+server.servlet.context-path=/ui
+management.endpoints.web.exposure.include=*
+
+```
 ## Using Zuul Filters for cross-cutting concerns
 
 
